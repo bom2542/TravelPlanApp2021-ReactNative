@@ -12,6 +12,10 @@ export default function App(props, { navigation }){
         props.navigation.navigate('PlaceDetail', {
             PlaceName: props.name,
             PlacePicture: props.picture,
+            PlaceDesc: props.desc,
+            PlaceLat: props.lat,
+            PlaceLong: props.long,
+            PlaceID: props.id,
         });
     }
 

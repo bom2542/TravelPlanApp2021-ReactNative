@@ -37,6 +37,8 @@ export default function App({navigation}) {
                         province={item.province}
                         id={item.id}
                         navigation={navigation}
+                        lat={item.lat}
+                        long={item.long}
                     />
                 ))}
             </View>

@@ -65,11 +65,17 @@ export default function App({navigation}){
         }
     }
 
+    async function Logout(){
+        await firebase.auth().signOut();
+        navigation.reset({index: 0, routes: [{name: 'Login'}]});
+    }
+
     return (
         <View style={styles.container}>
             <Image source={image == '' ? require('../images/logo.png') : {uri:image}} style={{width: 150, height: 150, borderRadius: 150/2, }} />
             <Button title='Change Pic' onPress={() => UploadPic()} />
             <Text>{ name }</Text>
+            <Button title='Logout' onPress={() => Logout()} />
         </View>
     );
 }
