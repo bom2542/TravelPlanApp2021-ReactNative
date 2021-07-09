@@ -62,6 +62,8 @@ export default function App({ route, navigation }){
         GetComment();
     }, []);
 
+    moment.locale('th');
+
     return(
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -100,20 +102,23 @@ export default function App({ route, navigation }){
                             name={item.name}
                             message={item.message}
                             pic={item.picture}
-                            date={moment(item.createdAt.toDate()).format("DD-MM-YYYY H:mm")}
+                            date={moment(item.createdAt.toDate()).calendar()}
                         />
                     ))}
                 </View>
             </ScrollView>
             <View style={styles.footer_fixed}>
-                <View style={styles.Comment}>
-                    <Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>
-                    <Button title="Review" color="#1E6738" onPress={SaveComment} />
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium',}} ><FontAwesome5 name='luggage-cart' size={15} color='white' /> TRIP CART</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} ><FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
+                </TouchableOpacity>
             </View>
+            {/*<View style={styles.footer_fixed}>*/}
+            {/*    <View style={styles.Comment}>*/}
+            {/*        /!*<Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>*!/*/}
+            {/*        /!*<Button title="Review" color="#1E6738" onPress={SaveComment} />*!/*/}
+            {/*        */}
+            {/*    </View>*/}
+            {/*</View>*/}
         </SafeAreaView>
     );
 }
@@ -159,8 +164,9 @@ const styles = StyleSheet.create({
         padding: 5,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        justifyContent: "flex-start",
+        //justifyContent: "flex-start",
         alignSelf: 'center',
+        width: '100%',
     },
     CommentList: {
         flexDirection: 'row',
@@ -184,8 +190,7 @@ const styles = StyleSheet.create({
         margin: 10,
         alignItems: "center",
         backgroundColor: "#154360",
-        padding: 15,
-        width: '40%',
+        padding: 10,
         borderBottomLeftRadius: 3,
         borderBottomRightRadius: 3,
         borderTopLeftRadius: 3,
