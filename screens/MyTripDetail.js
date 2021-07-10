@@ -30,7 +30,6 @@ export default function App({ route, navigation }){
     const [pickerMode, setPickerMode] = useState(null);
     const [inline, setInline] = useState(false);
     const tomorrow = new Date(today);
-    //tomorrow.setDate(tomorrow.getDate() + 1);
     const [date] = useState(tomorrow);
     const [StartDate, setStartDate] = useState('');
     const [StartDate2, setStartDate2] = useState('');
@@ -72,17 +71,8 @@ export default function App({ route, navigation }){
             }).catch(function (){});
     }
 
-    async function SaveComment(){
-        const MakeComment = { name: name, message: message, createdAt: firebase.firestore.FieldValue.serverTimestamp(), picture: image};
-
-        await firebase.firestore().collection('places').doc(PlaceID).collection('comment').doc().set(MakeComment)
-            .then(function (){
-                GetComment();
-            }).catch(function (){});
-    }
-
     async function GetComment() {
-        const collRef = firestore.collection('places').doc(PlaceID).collection('comment').orderBy('createdAt', 'desc');;
+        const collRef = firestore.collection('places').doc(PlaceID).collection('comment').orderBy('createdAt', 'desc');
         const col = await collRef.get();
         let res = [];
         col.forEach((doc) => {
@@ -109,16 +99,16 @@ export default function App({ route, navigation }){
                     <Text style={styles.place_name2}><FontAwesome5 name="map-marked-alt" /> จุดที่ตั้ง{PlaceName}</Text>
                 </View>
                 <MapView style={styles.map}
-                    initialRegion= {{
+                         initialRegion= {{
+                             latitude: PlaceLat,
+                             longitude: PlaceLong,
+                             latitudeDelta: 0.09,
+                             longitudeDelta: 0.09,
+                         }} provider="google" >
+                    <Marker coordinate={{
                         latitude: PlaceLat,
                         longitude: PlaceLong,
-                        latitudeDelta: 0.09,
-                        longitudeDelta: 0.09,
-                    }} provider="google" >
-                    <Marker coordinate={{
-                            latitude: PlaceLat,
-                            longitude: PlaceLong,
-                        }} pinColor="red">
+                    }} pinColor="red">
                         <Callout>
                             <Text style={styles.place_desc}>{PlaceName}</Text>
                         </Callout>
@@ -139,36 +129,36 @@ export default function App({ route, navigation }){
                 </View>
             </ScrollView>
             <ThemeProvider theme={theme}>
-            <View style={styles.footer_fixed}>
-                <View style={{ flex: 1, flexDirection: "row", padding: 20, alignItems: 'center', marginTop: 5,}}>
-                    {/*<View style={{ flex: 1, alignItems: 'center', }} >*/}
-                    {/*    <Text style={styles.font_16pt}>Date : </Text>*/}
-                    {/*</View>*/}
-                    <TouchableOpacity style={styles.start_date_box} onPress={showDateTimePicker}>
+                <View style={styles.footer_fixed}>
+                    <View style={{ flex: 1, flexDirection: "row", padding: 20, alignItems: 'center', marginTop: 5,}}>
+                        {/*<View style={{ flex: 1, alignItems: 'center', }} >*/}
+                        {/*    <Text style={styles.font_16pt}>Date : </Text>*/}
+                        {/*</View>*/}
+                        <TouchableOpacity style={styles.start_date_box} onPress={showDateTimePicker}>
                             <Text style={styles.font_16pt}><FontAwesome5 name='calendar-alt' size={15} color='white' />  Select start</Text>
-                    </TouchableOpacity>
-                    <View style={styles.end_date_box}>
-                        <Text style={styles.font_14pt}>{StartDate2}</Text>
-                    </View>
-                    {Platform.OS === "ios" && (
-                        <View style={style.inlineSwitchContainer}>
-                            <Text style={style.inlineSwitchText}>Display inline?</Text>
-                            <Switch value={inline} onValueChange={setInline} />
+                        </TouchableOpacity>
+                        <View style={styles.end_date_box}>
+                            <Text style={styles.font_14pt}>{StartDate2}</Text>
                         </View>
-                    )}
-                    <StDateTimePickerModal
-                        isVisible={pickerMode !== null}
-                        mode={pickerMode}
-                        onConfirm={StartHandleConfirm}
-                        onCancel={hidePicker}
-                        display={inline ? "inline" : undefined}
-                        minimumDate={date}
-                    />
+                        {Platform.OS === "ios" && (
+                            <View style={style.inlineSwitchContainer}>
+                                <Text style={style.inlineSwitchText}>Display inline?</Text>
+                                <Switch value={inline} onValueChange={setInline} />
+                            </View>
+                        )}
+                        <StDateTimePickerModal
+                            isVisible={pickerMode !== null}
+                            mode={pickerMode}
+                            onConfirm={StartHandleConfirm}
+                            onCancel={hidePicker}
+                            display={inline ? "inline" : undefined}
+                            minimumDate={date}
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.button} onPress={SaveMyTrip}>
+                        <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} ><FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={SaveMyTrip}>
-                    <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} ><FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
-                </TouchableOpacity>
-            </View>
             </ThemeProvider>
             {/*<View style={styles.footer_fixed}>*/}
             {/*    <View style={styles.Comment}>*/}

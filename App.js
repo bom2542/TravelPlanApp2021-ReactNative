@@ -14,6 +14,8 @@ import ResetScreen from './screens/Reset';
 import HomeScreen from './screens/Home';
 import MeScreen from './screens/Me';
 import PlaceDetailScreen from './screens/PlaceDetail';
+import MyTrip from './screens/MyTrip';
+import MyTripDetailScreen from './screens/MyTripDetail';
 
 const NavigationDrawerStructure = (props) => {
     const toggleDrawer = () => {
@@ -48,6 +50,7 @@ function MainMenu(){
     return(
         <Tab.Navigator>
             <Tab.Screen name='Home' component={HomeScreen} options={{ tabBarLabel: 'HOME', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="home" color={color} size={size} /> )}} />
+            <Tab.Screen name='Trip' component={MyTrip} options={{ tabBarLabel: 'MY TRIPS', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marked-alt" color={color} size={size} /> )}} />
             <Tab.Screen name='Me' component={SelfMenu} options={{ tabBarLabel: 'USER', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="user" color={color} size={size} /> )}} />
         </Tab.Navigator>
     );
@@ -76,6 +79,17 @@ export default function App( { navigation } ){
                     },
                 }}/>
                 <Stack.Screen name='PlaceDetail' component={PlaceDetailScreen} options={{
+                    title: 'Detail',
+                    headerStyle: {
+                        backgroundColor: '#0085E6',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'KanitLight',
+                        fontSize: 18,
+                    },
+                }}/>
+                <Stack.Screen name='MyTripDetail' component={MyTripDetailScreen} options={{
                     title: 'Detail',
                     headerStyle: {
                         backgroundColor: '#0085E6',
