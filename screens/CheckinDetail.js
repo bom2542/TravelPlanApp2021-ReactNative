@@ -1,6 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Text, View, Image, Dimensions, ScrollView, SafeAreaView, TouchableOpacity, Platform, Switch, Button} from "react-native";
-import { ThemeProvider, Input } from 'react-native-elements';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Dimensions,
+    ScrollView,
+    SafeAreaView,
+    Platform,
+    Switch,
+    TouchableOpacity
+} from "react-native";
+import { ThemeProvider, Input, Button } from 'react-native-elements';
 import MapView, { Marker, Callout } from "react-native-maps"
 import moment from "moment";
 import StDateTimePickerModal from "react-native-modal-datetime-picker";
@@ -100,7 +111,7 @@ export default function App({ route, navigation }){
 
         await firebase.firestore().collection('places').doc(PlaceID).collection('comment').doc().set(MakeComment)
             .then(function (){
-                GetComment();
+                navigation.navigate('Checkin');
             }).catch(function (){});
     }
 
@@ -164,9 +175,9 @@ export default function App({ route, navigation }){
             <ThemeProvider theme={theme}>
                 <View style={styles.footer_fixed}>
                     <View style={{ flex: 1, flexDirection: "row", padding: 20, alignItems: 'center', marginTop: 5,}}>
-                        <TouchableOpacity style={styles.start_date_box} onPress={showDateTimePicker}>
-                            <Text style={styles.font_16pt}><FontAwesome5 name='calendar-check' size={15} color='white' />  Edit Date</Text>
-                        </TouchableOpacity>
+                        <View style={styles.start_date_box}>
+                            <Text style={styles.font_16pt}><FontAwesome5 name='calendar-check' size={15} color='white' />  Checkin</Text>
+                        </View>
                         <View style={styles.end_date_box}>
                             <Text style={styles.font_14pt}>{StartDate2}</Text>
                         </View>
@@ -185,16 +196,14 @@ export default function App({ route, navigation }){
                             minimumDate={date}
                         />
                     </View>
-                    <View style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 15, alignItems: 'center', marginTop: 10, marginBottom: 10,}}>
-                        <View style={styles.footer_fixed}>
-                            <View style={styles.Comment}>
-                                <Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>
-                                <Button title="Review" color="#1E6738" onPress={SaveComment} />
-                            </View>
-                        </View>
-                    </View>
                 </View>
             </ThemeProvider>
+            <View style={{backgroundColor: '#FBFCFC',}}>
+                <View style={styles.Comment}>
+                    <Input style={styles.textStyle} placeholder="Review ..." onChangeText={setMessage}/>
+                    <Button title="Review" color="#1E6738" onPress={SaveComment} />
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
@@ -246,9 +255,9 @@ const styles = StyleSheet.create({
         padding: 5,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        //justifyContent: "flex-start",
         alignSelf: 'center',
         width: '100%',
+        alignItems: 'center',
     },
     CommentList: {
         flexDirection: 'row',
@@ -258,62 +267,27 @@ const styles = StyleSheet.create({
         alignContent: 'stretch',
     },
     Comment: {
-        width: '60%',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+        width: Dimensions.get("window").width-70,
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center"
     },
     textStyle:{
         paddingLeft: 5,
         fontFamily: 'KanitLight',
         fontSize: 14,
     },
-    EditBtn: {
-        flex: 1,
-        alignItems: "center",
-        backgroundColor: "#FCAF38",
-        paddingLeft: 5,
-        padding: 15,
-        borderBottomLeftRadius: 3,
-        borderTopLeftRadius: 3,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.20,
-        shadowRadius: 1.41,
-        elevation: 2,
-    },
     DelBtn: {
-        flex: 1,
+        flex: 3,
         alignItems: "center",
-        backgroundColor: "#F95335",
         padding: 15,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.20,
-        shadowRadius: 1.41,
-        elevation: 2,
     },
     CheckinBtn: {
-        flex: 2,
+        flex: 1,
         alignItems: "center",
-        backgroundColor: "#186A3B",
         padding: 15,
-        borderBottomRightRadius: 3,
-        borderTopRightRadius: 3,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.20,
-        shadowRadius: 1.41,
-        elevation: 2,
     },
     start_date_box: {
         marginLeft: 5,
@@ -325,11 +299,29 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 7,
         borderTopLeftRadius: 7,
     },
+    start_date_box2: {
+        marginLeft: 5,
+        flex: 3,
+        alignItems: 'center',
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderBottomLeftRadius: 7,
+        borderTopLeftRadius: 7,
+    },
     end_date_box: {
         marginRight: 5,
         flex: 2,
         alignItems: 'center',
         backgroundColor: '#FF5C77',
+        paddingTop: 8,
+        paddingBottom: 8,
+        borderBottomRightRadius: 7,
+        borderTopRightRadius: 7,
+    },
+    end_date_box2: {
+        marginRight: 5,
+        flex: 1,
+        alignItems: 'center',
         paddingTop: 8,
         paddingBottom: 8,
         borderBottomRightRadius: 7,

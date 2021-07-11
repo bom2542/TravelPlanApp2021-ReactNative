@@ -45,7 +45,7 @@ export default function App({navigation}) {
             <View style={styles.container}>
                 {products.map((item) => (
                     <CheckinCard
-                        date={moment(item.Checkin_date.toDate()).format('lll')}
+                        date={moment(item.Checkin_date.toDate()).calendar()}
                         PlacePicture={item.PlacePicture}
                         PlaceName={item.PlaceName}
                         PlaceDesc={item.PlaceDesc}

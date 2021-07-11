@@ -25,13 +25,11 @@ const NavigationDrawerStructure = (props) => {
     };
 
     return (
-        <View style={{ flexDirection: 'row' }}>
-            {/*<TouchableOpacity onPress={toggleDrawer}>*/}
+        <View style={{ flexDirection: 'row', }}>
                 <Image
-                    source={{ uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png', }}
-                    style={{ width: 30, height: 30, marginLeft: 15 }}
+                    source={require('./images/logo.png')}
+                    style={{ width: 40, height: 50, marginLeft: 20,}}
                 />
-            {/*</TouchableOpacity>*/}
         </View>
     );
 };
@@ -40,21 +38,13 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-function SelfMenu() {
-    return (
-        <Drawer.Navigator>
-            <Drawer.Screen name="Profile" component={MeScreen} />
-        </Drawer.Navigator>
-    );
-}
-
 function MainMenu(){
     return(
         <Tab.Navigator>
-            <Tab.Screen name='Home' component={HomeScreen} options={{ tabBarLabel: 'HOME', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="home" color={color} size={size} /> )}} />
-            <Tab.Screen name='Trip' component={MyTripScreen} options={{ tabBarLabel: 'TRIPS', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marked-alt" color={color} size={size} /> )}} />
-            <Tab.Screen name='Checkin' component={CheckinScreen} options={{ tabBarLabel: 'CHECKIN', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marker-alt" color={color} size={size} /> )}} />
-            <Tab.Screen name='Me' component={SelfMenu} options={{ tabBarLabel: 'USER', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="user" color={color} size={size} /> )}} />
+            <Tab.Screen name='Home' component={HomeScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="home" color={color} size={size} /> )}} />
+            <Tab.Screen name='Trip' component={MyTripScreen} options={{ tabBarLabel: 'Trips', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marked-alt" color={color} size={size} /> )}} />
+            <Tab.Screen name='Checkin' component={CheckinScreen} options={{ tabBarLabel: 'History', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marker-alt" color={color} size={size} /> )}} />
+            <Tab.Screen name='Profile' component={MeScreen} options={{ tabBarLabel: 'User', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="user" color={color} size={size} /> )}} />
         </Tab.Navigator>
     );
 }
@@ -77,8 +67,9 @@ export default function App( { navigation } ){
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        fontFamily: 'KanitMedium',
+                        fontFamily: 'KanitLight',
                         fontSize: 20,
+                        marginTop: 3,
                     },
                 }}/>
                 <Stack.Screen name='PlaceDetail' component={PlaceDetailScreen} options={{

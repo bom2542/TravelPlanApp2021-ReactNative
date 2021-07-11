@@ -178,10 +178,10 @@ export default function App({ route, navigation }){
                     </View>
                     <View style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 15, alignItems: 'center', marginTop: 10, marginBottom: 10,}}>
                         <TouchableOpacity style={styles.EditBtn} onPress={EditMyTrip}>
-                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='edit' size={20} color='white' /> Ed</Text>
+                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='edit' size={20} color='white' /> Edi</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.DelBtn} onPress={DelMyTrip}>
-                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='trash' size={20} color='white' /> De</Text>
+                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='trash' size={20} color='white' /> Del</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.CheckinBtn} onPress={Checkin} >
                             <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='map-marker-alt' size={20} color='white' />  Checkin</Text>
@@ -189,13 +189,6 @@ export default function App({ route, navigation }){
                     </View>
                 </View>
             </ThemeProvider>
-            {/*<View style={styles.footer_fixed}>*/}
-            {/*    <View style={styles.Comment}>*/}
-            {/*        /!*<Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>*!/*/}
-            {/*        /!*<Button title="Review" color="#1E6738" onPress={SaveComment} />*!/*/}
-            {/*        */}
-            {/*    </View>*/}
-            {/*</View>*/}
         </SafeAreaView>
     );
 }

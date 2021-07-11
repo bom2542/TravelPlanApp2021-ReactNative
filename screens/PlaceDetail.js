@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, Text, View, Image, Dimensions, ScrollView, SafeAreaView, TouchableOpacity, Platform, Switch} from "react-native";
-import { ThemeProvider } from 'react-native-elements';
+import { ThemeProvider, Input, Button } from 'react-native-elements';
 import MapView, { Marker, Callout } from "react-native-maps"
 import moment from "moment";
 import StDateTimePickerModal from "react-native-modal-datetime-picker";
@@ -165,13 +165,6 @@ export default function App({ route, navigation }){
                 </TouchableOpacity>
             </View>
             </ThemeProvider>
-            {/*<View style={styles.footer_fixed}>*/}
-            {/*    <View style={styles.Comment}>*/}
-            {/*        /!*<Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>*!/*/}
-            {/*        /!*<Button title="Review" color="#1E6738" onPress={SaveComment} />*!/*/}
-            {/*        */}
-            {/*    </View>*/}
-            {/*</View>*/}
         </SafeAreaView>
     );
 }
