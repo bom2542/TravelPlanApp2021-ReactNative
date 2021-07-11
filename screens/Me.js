@@ -1,109 +1,3 @@
-// import React, {useState, useEffect} from "react";
-// import {Button, StyleSheet, Text, TextInput, View, Alert, Image, Platform} from "react-native";
-// import Constants from "expo-constants";
-//
-// import firebase from "firebase/app";
-// import firestore from "../Firebase";
-// import 'firebase/auth';
-// import 'firebase/storage';
-//
-// import * as ImagePicker from 'expo-image-picker';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
-//
-// const Drawer = createDrawerNavigator();
-//
-// export default function App({navigation}){
-//
-//     const [currentUser, setCurrentUser] = useState('');
-//     const [name, setName] = useState('');
-//     const [image, setImage] = useState('');
-//
-//     useEffect(() => {
-//         async function CheckLogin(){
-//             firebase.auth().onAuthStateChanged((user) => {
-//                 if(user){
-//                     setCurrentUser(user);
-//
-//                     const docRef = firestore.collection('users').doc(user.uid);
-//                     docRef.get().then((doc) => {
-//                         setName(doc.data().name);
-//                     });
-//                     let storageRef = firebase.storage().ref();
-//                     let picRef = storageRef.child(user.uid + '.jpg').getDownloadURL();
-//                     picRef.then((url) => setImage(url));
-//                 }
-//             });
-//         }
-//         CheckLogin();
-//     }, []);
-//
-//     useEffect(() => {
-//         async function AskPer() {
-//             if(Platform.OS !== 'web'){
-//                 const {status} = await ImagePicker.requestCameraPermissionsAsync();
-//                 if(status !== 'granted'){
-//                     alert('Need Permission');
-//                 }
-//             }
-//         }
-//         AskPer();
-//     }, []);
-//
-//     async function UploadPic() {
-//         let result = await ImagePicker.launchCameraAsync();
-//         if(!result.cancelled){
-//             let response = await fetch(result.uri);
-//             let blob = await response.blob();
-//
-//             let storageRef = firebase.storage().ref();
-//             let picRef = storageRef.child(currentUser.uid + '.jpg');
-//
-//             picRef.put(blob).then((pic) => {
-//                 alert('Uploaded!!!');
-//                 setImage(result.uri);
-//             });
-//         }
-//     }
-//
-//     async function Logout(){
-//         await firebase.auth().signOut();
-//         navigation.reset({index: 0, routes: [{name: 'Login'}]});
-//     }
-//
-//     return (
-//         <View style={styles.container}>
-//             <Image source={image == '' ? require('../images/logo.png') : {uri:image}} style={{width: 150, height: 150, borderRadius: 150/2, }} />
-//             <Button title='Change Pic' onPress={() => UploadPic()} />
-//             <Text>{ name }</Text>
-//             <Button title='Logout' onPress={() => Logout()} />
-//         </View>
-//     );
-// }
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         paddingTop: Constants.statusBarHeight,
-//         backgroundColor: '#ecf0f1',
-//         padding: 8,
-//     },
-//     paragraph: {
-//         margin: 24,
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//         textAlign: 'center',
-//     },
-//     input: {
-//         borderWidth: 1,
-//         padding: 10,
-//         margin: 5,
-//     },
-// })
-
-
-
 /* Basic Library */
 import React, { useState, useEffect, useRef } from "react";
 import Constants from 'expo-constants';
@@ -115,17 +9,22 @@ import {View, Text, Button, StyleSheet, SafeAreaView, Image, TouchableOpacity, M
 import firebase from 'firebase';
 import * as ImagePicker from 'expo-image-picker';
 import ActionSheet from 'react-native-actionsheet';
+import moment from "moment";
 
 /* Internal File */
 import firestore from '../Firebase';
+import {FontAwesome5} from "@expo/vector-icons";
 
 export default function Profile({ navigation }) {
 
     /* Local Constant */
     const {uid} = firebase.auth().currentUser;
     const [user, setUser] = useState([]);
-    const [img, setImage] = useState('https://reactnative.dev/img/tiny_logo.png');
+    const [fname, setFname] = useState([]);
+    const [img, setImage] = useState('http://pharadorn.lnw.mn/TravelPlan/images/logo/logo-application.png');
     let actionSheet = useRef();
+    const [StartDate, setStartDate] = useState([]);
+    const [mail, setMail] = useState([]);
     var optionArray = ['Take photos', 'Choose Gallery', 'Cancel'];
 
     const showActionSheet = () => {
@@ -157,6 +56,9 @@ export default function Profile({ navigation }) {
         if (!doc.exists) {
         } else {
             setUser(doc.data().name);
+            setFname(doc.data().fname);
+            setStartDate(moment(doc.data().createdAt.toDate()).fromNow());
+            setMail(doc.data().email);
         }
     }
 
@@ -218,11 +120,15 @@ export default function Profile({ navigation }) {
             <View style={styles.container}>
                 <View style={{alignItems: 'center', }}>
                     <TouchableOpacity onPress={showActionSheet}>
-                        <Image source={{ uri: img }} style={{ width: 150, height: 150, marginBottom: 20, borderRadius: 150/2,}} />
+                        <Image source={{ uri: img }} style={{ width: 200, height: 200, marginBottom: 15, borderRadius: 200/2,}} />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.username}>{user}</Text>
-                    <Button title={"Logout"} onPress={Logout} />
+                <Text style={styles.username}>{fname}{user}</Text>
+                <Text style={styles.username2}>User email : {mail}</Text>
+                <Text style={styles.username3}>Have been living : {StartDate}</Text>
+                <TouchableOpacity style={styles.button} onPress={Logout}>
+                    <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 14,}} ><FontAwesome5 name='sign-out-alt' size={15} color='white' />  LOGOUT</Text>
+                </TouchableOpacity>
                 <ActionSheet
                     ref={actionSheet}
                     title={'Please select sources your image?'}
@@ -254,7 +160,39 @@ const styles = StyleSheet.create({
     },
     username: {
         textAlign: 'center',
-        fontSize: 20,
-        paddingBottom: 20,
+        fontSize: 24,
+        // paddingBottom: 15,
+        fontFamily: 'KanitMedium',
+    },
+    username2: {
+        textAlign: 'center',
+        fontSize: 18,
+        paddingBottom: 5,
+        fontFamily: 'KanitLight',
+    },
+    username3: {
+        textAlign: 'center',
+        fontSize: 18,
+        paddingBottom: 5,
+        fontFamily: 'KanitLight',
+        marginBottom: 15,
+    },
+    button: {
+        //margin: 10,
+        alignItems: "center",
+        backgroundColor: "#DE3F2A",
+        padding: 10,
+        borderBottomLeftRadius: 3,
+        borderBottomRightRadius: 3,
+        borderTopLeftRadius: 3,
+        borderTopRightRadius: 3,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
     },
 });

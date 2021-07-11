@@ -13,7 +13,7 @@ export default function App({navigation}) {
     const [products, setProducts] = useState([]);
 
     async function GetPlaces() {
-        let collRef = firestore.collection('places');
+        let collRef = firestore.collection('places').orderBy('createdAt', 'desc');
         await collRef.get().then((querySnap) => {
             const tempDoc = querySnap.docs.map((doc) => {
                 return {id: doc.id, ...doc.data()};

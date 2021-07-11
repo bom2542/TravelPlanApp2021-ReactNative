@@ -37,29 +37,26 @@ export default function App({navigation}){
 
     return (
         <ThemeProvider theme={theme}>
-        <View style={styles.container}>
-            <View style={styles.logo}>
-                <Image style={styles.logo_img} source={require('../images/logo.png')} />
-                <Text style={{ fontFamily: 'KanitLight', fontSize: 28 }}>วางแผนการท่องเที่ยว</Text>
-                <Text style={{ fontFamily: 'KanitLight', fontSize: 16 }}>Travel Plan Application</Text>
+            <View style={styles.container}>
+                <View style={styles.logo}>
+                    <Image style={styles.logo_img} source={require('../images/logo.png')} />
+                    <Text style={{ fontFamily: 'KanitLight', fontSize: 28 }}>วางแผนการท่องเที่ยว</Text>
+                    <Text style={{ fontFamily: 'KanitLight', fontSize: 16 }}>Travel Plan Application</Text>
+                </View>
+                <Input style={styles.input} placeholder='E-mail' onChangeText={setEmail} leftIcon={
+                        <FontAwesome5 name='user-alt' size={15} color='#0085E6'/> }/>
+                <Input style={styles.input} placeholder='Password' onChangeText={setPassword} secureTextEntry leftIcon={
+                        <FontAwesome5 name='key' size={15} color='#0085E6' /> }/>
+                <Button title='  Login' onPress={() => UserLogin()} icon={
+                        <FontAwesome5 name='sign-in-alt' size={15} color='white'/>}
+                        buttonStyle={{ backgroundColor: "green" }}/>
+                <Button title=' Register' onPress={() => navigation.navigate('Register')} icon={
+                        <FontAwesome5 name='user-plus' size={15} color='white' /> }
+                        containerStyle={{ marginTop: 10 }} buttonStyle={{ backgroundColor: "blue" }}/>
+                <Button title='  Reset' onPress={() => navigation.navigate('Reset')} icon={
+                    <FontAwesome5 name='unlock-alt' size={15} color='white' /> }
+                        containerStyle={{ marginTop: 10 }} buttonStyle={{ backgroundColor: "red" }}/>
             </View>
-
-            {/* Form Login */}
-            <Input style={styles.input} placeholder='E-mail' onChangeText={setEmail} leftIcon={
-                    <FontAwesome5 name='user-alt' size={20} color='#0085E6'/> }/>
-            <Input style={styles.input} placeholder='Password' onChangeText={setPassword} secureTextEntry leftIcon={
-                    <FontAwesome5 name='key' size={20} color='#0085E6' /> }/>
-            <Button title='  Login' onPress={() => UserLogin()} icon={
-                    <FontAwesome5 name='sign-in-alt' size={15} color='white'/>}
-                    buttonStyle={{ backgroundColor: "green" }}/>
-            <Button title=' Register' onPress={() => navigation.navigate('Register')} icon={
-                    <FontAwesome5 name='user-plus' size={15} color='white' /> }
-                    containerStyle={{ marginTop: 10 }} buttonStyle={{ backgroundColor: "blue" }}/>
-            <Button title='  Reset' onPress={() => navigation.navigate('Reset')} icon={
-                <FontAwesome5 name='unlock-alt' size={15} color='white' /> }
-                    containerStyle={{ marginTop: 10 }} buttonStyle={{ backgroundColor: "red" }}/>
-
-        </View>
         </ThemeProvider>
     );
 }
@@ -79,8 +76,9 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     input: {
-        paddingLeft: 10,
+        margin: 5,
         fontFamily: 'KanitLight',
+        fontSize: 16,
     },
     logo: {
         alignItems: 'center',

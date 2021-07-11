@@ -34,7 +34,7 @@ export default function App({ route, navigation }){
     const [comment, setComment] = useState([]);
     const [name, setName] = useState('');
     const [message, setMessage] = useState([]);
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState('http://pharadorn.lnw.mn/TravelPlan/images/logo/logo-application.png');
 
     //Constant DateTime
     const today = new Date();

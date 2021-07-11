@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
         height: 180,
     },
     footer: {
-        marginTop: 220,
+        marginTop: 190,
     }
 })

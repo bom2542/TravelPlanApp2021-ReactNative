@@ -44,7 +44,7 @@ function MainMenu(){
             <Tab.Screen name='Home' component={HomeScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="home" color={color} size={size} /> )}} />
             <Tab.Screen name='Trip' component={MyTripScreen} options={{ tabBarLabel: 'Trips', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marked-alt" color={color} size={size} /> )}} />
             <Tab.Screen name='Checkin' component={CheckinScreen} options={{ tabBarLabel: 'History', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="map-marker-alt" color={color} size={size} /> )}} />
-            <Tab.Screen name='Profile' component={MeScreen} options={{ tabBarLabel: 'User', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="user" color={color} size={size} /> )}} />
+            <Tab.Screen name='Profile' component={MeScreen} options={{ tabBarLabel: 'Me', tabBarIcon: ({ color, size }) => ( <FontAwesome5 name="user" color={color} size={size} /> )}} />
         </Tab.Navigator>
     );
 }
