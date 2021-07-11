@@ -4,9 +4,7 @@ import { ThemeProvider } from 'react-native-elements';
 import MapView, { Marker, Callout } from "react-native-maps"
 import moment from "moment";
 import StDateTimePickerModal from "react-native-modal-datetime-picker";
-import Constants from "expo-constants";
 import { FontAwesome5 } from '@expo/vector-icons';
-
 import firestore from "../Firebase";
 import firebase from 'firebase/app';
 import 'firebase/auth';

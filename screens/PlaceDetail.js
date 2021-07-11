@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, Text, View, Image, Dimensions, ScrollView, SafeAreaView, TouchableOpacity, Platform, Switch} from "react-native";
-import { ThemeProvider, Input, Button } from 'react-native-elements';
+import { ThemeProvider, } from 'react-native-elements';
 import MapView, { Marker, Callout } from "react-native-maps"
 import moment from "moment";
 import StDateTimePickerModal from "react-native-modal-datetime-picker";
-import Constants from "expo-constants";
 import { FontAwesome5 } from '@expo/vector-icons';
-
 import firestore from "../Firebase";
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -16,7 +14,6 @@ import CommentCard from '../components/CommentCard';
 export default function App({ route, navigation }){
 
     const { PlacePicture, PlaceName, PlaceDesc, PlaceLat, PlaceLong, PlaceID, PlaceDate } = route.params;
-
     const [currentUser, setCurrentUser] = useState(null);
 
     //Constant Comment
@@ -67,15 +64,6 @@ export default function App({ route, navigation }){
         await firebase.firestore().collection('users').doc(currentUser.uid).collection('trip').doc().set(MyTrip)
             .then(function (){
                 navigation.navigate('Trip');
-            }).catch(function (){});
-    }
-
-    async function SaveComment(){
-        const MakeComment = { name: name, message: message, createdAt: firebase.firestore.FieldValue.serverTimestamp(), picture: image};
-
-        await firebase.firestore().collection('places').doc(PlaceID).collection('comment').doc().set(MakeComment)
-            .then(function (){
-                GetComment();
             }).catch(function (){});
     }
 
@@ -161,7 +149,8 @@ export default function App({ route, navigation }){
                     />
                 </View>
                 <TouchableOpacity style={styles.button} onPress={SaveMyTrip}>
-                    <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} ><FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
+                    <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} >
+                        <FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
                 </TouchableOpacity>
             </View>
             </ThemeProvider>
@@ -216,7 +205,6 @@ const styles = StyleSheet.create({
         padding: 5,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        //justifyContent: "flex-start",
         alignSelf: 'center',
         width: '100%',
     },

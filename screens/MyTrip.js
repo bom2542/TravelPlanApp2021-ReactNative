@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from "react";
-import {Button, StyleSheet, Text, TextInput, View, Alert, ScrollView} from "react-native";
+import {StyleSheet, View, ScrollView} from "react-native";
 import Constants from "expo-constants";
 import moment from "moment";
-
 import firebase from "firebase/app";
 import firestore from "../Firebase";
 import 'firebase/auth';

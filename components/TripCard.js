@@ -1,13 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {View, Text, Image, TouchableOpacity, StyleSheet, Alert} from "react-native";
-import { FontAwesome5 } from '@expo/vector-icons';
-
-import firestore from "../Firebase";
-import firebase from 'firebase/app';
+import React from "react";
+import {View, Text, Image, TouchableOpacity, StyleSheet, } from "react-native";
 import 'firebase/auth';
-import Constants from "expo-constants";
-
-import MyTrip from '../screens/MyTrip';
 
 export default function App(props, { navigation }){
 
@@ -32,10 +25,7 @@ export default function App(props, { navigation }){
             <View style={styles.desc}>
                     <Text style={styles.place_name}>{props.PlaceName}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
-                    <Text style={styles.place_province}>Start date : {props.date}</Text>
-                    {/*<TouchableOpacity onPress={RemoveTrip}>*/}
-                    {/*    <Text><FontAwesome5 name='trash' size={15} color='white' /></Text>*/}
-                    {/*</TouchableOpacity>*/}
+                    <Text style={styles.place_province}>Start : {props.date}</Text>
                 </View>
             </View>
         </TouchableOpacity>

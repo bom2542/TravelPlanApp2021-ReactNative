@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from "react";
-import {Button, StyleSheet, Text, TextInput, View, Alert, Image, ActivityIndicator, Animated} from "react-native";
+import React from "react";
+import {StyleSheet, Text, View, Image, ActivityIndicator,} from "react-native";
 import Constants from "expo-constants";
-
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 

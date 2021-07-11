@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from "react";
-import {StyleSheet, Text, TextInput, View, Alert, Picker} from "react-native";
+import React, {useState} from "react";
+import {StyleSheet, Text, View, Picker} from "react-native";
 import { ThemeProvider, Button, Input, Image} from 'react-native-elements';
 import Constants from "expo-constants";
-
 import firebase from "firebase/app";
 import firestore from "../Firebase";
 import 'firebase/auth';
@@ -19,7 +18,6 @@ export default function App({navigation}){
         await firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then((user) => {
-                //alert('สำเร็จ');
                 let collRef = firestore.collection('users').doc(user.user.uid);
                 collRef.set({
                     name: name,

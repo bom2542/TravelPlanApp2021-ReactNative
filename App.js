@@ -1,11 +1,10 @@
 import * as React from "react";
 import { FontAwesome5 } from '@expo/vector-icons';
-import {Button, StyleSheet, Text, TextInput, View, Alert, Image, Platform, TouchableOpacity} from "react-native";
+import {View, Image, } from "react-native";
 
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import SplashScreen from './screens/Splash';
 import LoginScreen from './screens/Login';
@@ -19,11 +18,7 @@ import MyTripDetailScreen from './screens/MyTripDetail';
 import CheckinScreen from './screens/Chekin';
 import CheckinDetailScreen from './screens/CheckinDetail';
 
-const NavigationDrawerStructure = (props) => {
-    const toggleDrawer = () => {
-        props.navigationProps.toggleDrawer();
-    };
-
+const NavigationDrawerStructure = () => {
     return (
         <View style={{ flexDirection: 'row', }}>
                 <Image
@@ -36,7 +31,6 @@ const NavigationDrawerStructure = (props) => {
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
 
 function MainMenu(){
     return(

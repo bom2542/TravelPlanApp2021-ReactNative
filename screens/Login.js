@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from "react";
-import {StyleSheet, Text, TextInput, View, Alert} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import Constants from "expo-constants";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ThemeProvider, Button, Input, Image} from 'react-native-elements';
-
 import firebase from "firebase/app";
-import firestore from "../Firebase";
 import 'firebase/auth';
 
 export default function App({navigation}){
