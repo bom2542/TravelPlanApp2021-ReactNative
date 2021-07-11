@@ -7,7 +7,7 @@ import firebase from "firebase/app";
 import firestore from "../Firebase";
 import 'firebase/auth';
 
-import TripCard from '../components/TripCard';
+import CheckinCard from '../components/CheckinCard';
 
 export default function App({navigation}) {
 
@@ -22,8 +22,8 @@ export default function App({navigation}) {
                     let collRef = firestore
                         .collection('users')
                         .doc(user.uid)
-                        .collection('trip')
-                        .orderBy('trip_date', 'asc');
+                        .collection('checkin')
+                        .orderBy('Checkin_date', 'asc');
 
                     collRef.get().then((querySnap) => {
                         const tempDoc = querySnap.docs.map((doc) => {
@@ -44,8 +44,8 @@ export default function App({navigation}) {
         <ScrollView>
             <View style={styles.container}>
                 {products.map((item) => (
-                    <TripCard
-                        date={moment(item.trip_date.toDate()).format('lll')}
+                    <CheckinCard
+                        date={moment(item.Checkin_date.toDate()).format('lll')}
                         PlacePicture={item.PlacePicture}
                         PlaceName={item.PlaceName}
                         PlaceDesc={item.PlaceDesc}

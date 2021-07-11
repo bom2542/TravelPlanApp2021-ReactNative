@@ -12,7 +12,7 @@ import MyTrip from '../screens/MyTrip';
 export default function App(props, { navigation }){
 
     function Detail(){
-        props.navigation.navigate('MyTripDetail', {
+        props.navigation.navigate('CheckinDetail', {
             PlaceName: props.PlaceName,
             PlacePicture: props.PlacePicture,
             PlaceDesc: props.PlaceDesc,
@@ -30,9 +30,9 @@ export default function App(props, { navigation }){
                 <Image source={{uri: props.PlacePicture}} style={styles.img} />
             </View>
             <View style={styles.desc}>
-                    <Text style={styles.place_name}>{props.PlaceName}</Text>
+                <Text style={styles.place_name}>{props.PlaceName}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
-                    <Text style={styles.place_province}>Start date : {props.date}</Text>
+                    <Text style={styles.place_province}>Checkin date : {props.date}</Text>
                     {/*<TouchableOpacity onPress={RemoveTrip}>*/}
                     {/*    <Text><FontAwesome5 name='trash' size={15} color='white' /></Text>*/}
                     {/*</TouchableOpacity>*/}
@@ -44,7 +44,7 @@ export default function App(props, { navigation }){
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#F39C12',
+        backgroundColor: '#186A3B',
         borderRadius: 7,
         overflow: "hidden",
         marginBottom: 15,

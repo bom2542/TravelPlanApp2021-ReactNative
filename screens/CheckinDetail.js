@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Text, View, Image, Dimensions, ScrollView, SafeAreaView, TouchableOpacity, Platform, Switch} from "react-native";
-import { ThemeProvider } from 'react-native-elements';
+import {StyleSheet, Text, View, Image, Dimensions, ScrollView, SafeAreaView, TouchableOpacity, Platform, Switch, Button} from "react-native";
+import { ThemeProvider, Input } from 'react-native-elements';
 import MapView, { Marker, Callout } from "react-native-maps"
 import moment from "moment";
 import StDateTimePickerModal from "react-native-modal-datetime-picker";
@@ -15,7 +15,7 @@ import CommentCard from '../components/CommentCard';
 
 export default function App({ route, navigation }){
 
-    const { PlacePicture, PlaceName, PlaceDesc, PlaceLat, PlaceLong, PlaceID, PlaceDate } = route.params;
+    const { PlacePicture, PlaceName, PlaceDesc, PlaceLat, PlaceLong, PlaceID, PlaceDate, id } = route.params;
 
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -30,8 +30,8 @@ export default function App({ route, navigation }){
     const [pickerMode, setPickerMode] = useState(null);
     const [inline, setInline] = useState(false);
     const [date] = useState(today);
-    const [StartDate, setStartDate] = useState('');
-    const [StartDate2, setStartDate2] = useState('');
+    const [StartDate, setStartDate] = useState(PlaceDate);
+    const [StartDate2, setStartDate2] = useState(PlaceDate);
     const showDateTimePicker = () => {
         setPickerMode("datetime");
     };
@@ -62,12 +62,37 @@ export default function App({ route, navigation }){
         CheckLogin();
     }, []);
 
-    async function SaveMyTrip(){
+    async function EditMyTrip(){
         const MyTrip = { place_id: PlaceID, trip_date: StartDate, PlacePicture: PlacePicture, PlaceName : PlaceName, PlaceDesc : PlaceDesc, PlaceLat : PlaceLat, PlaceLong : PlaceLong,};
-        await firebase.firestore().collection('users').doc(currentUser.uid).collection('trip').doc().set(MyTrip)
+        await firebase.firestore().collection('users').doc(currentUser.uid).collection('trip').doc(id).set(MyTrip)
             .then(function (){
                 navigation.navigate('Trip');
             }).catch(function (){});
+    }
+
+    async function DelMyTrip(){
+        let collRef = firestore
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection('trip')
+            .doc(id);
+        await collRef.delete().then(function (){
+            navigation.navigate('Trip');
+        }).catch(function (){});
+    }
+
+    async function Checkin(){
+        const MyTrip = { place_id: PlaceID, Checkin_date: firebase.firestore.FieldValue.serverTimestamp(), PlacePicture: PlacePicture, PlaceName : PlaceName, PlaceDesc : PlaceDesc, PlaceLat : PlaceLat, PlaceLong : PlaceLong,};
+        await firebase.firestore().collection('users').doc(currentUser.uid).collection('checkin').doc().set(MyTrip);
+
+        let collRef = firestore
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection('trip')
+            .doc(id);
+        await collRef.delete().then(function (){
+            navigation.navigate('Checkin');
+        }).catch(function (){});
     }
 
     async function SaveComment(){
@@ -107,16 +132,16 @@ export default function App({ route, navigation }){
                     <Text style={styles.place_name2}><FontAwesome5 name="map-marked-alt" /> จุดที่ตั้ง{PlaceName}</Text>
                 </View>
                 <MapView style={styles.map}
-                    initialRegion= {{
+                         initialRegion= {{
+                             latitude: PlaceLat,
+                             longitude: PlaceLong,
+                             latitudeDelta: 0.09,
+                             longitudeDelta: 0.09,
+                         }} provider="google" >
+                    <Marker coordinate={{
                         latitude: PlaceLat,
                         longitude: PlaceLong,
-                        latitudeDelta: 0.09,
-                        longitudeDelta: 0.09,
-                    }} provider="google" >
-                    <Marker coordinate={{
-                            latitude: PlaceLat,
-                            longitude: PlaceLong,
-                        }} pinColor="red">
+                    }} pinColor="red">
                         <Callout>
                             <Text style={styles.place_desc}>{PlaceName}</Text>
                         </Callout>
@@ -137,41 +162,39 @@ export default function App({ route, navigation }){
                 </View>
             </ScrollView>
             <ThemeProvider theme={theme}>
-            <View style={styles.footer_fixed}>
-                <View style={{ flex: 1, flexDirection: "row", paddingTop: 20, paddingBottom: 20,alignItems: 'center', marginTop: 20,}}>
-                    <TouchableOpacity style={styles.start_date_box} onPress={showDateTimePicker}>
-                            <Text style={styles.font_16pt}><FontAwesome5 name='calendar-alt' size={15} color='white' />  Enter Start</Text>
-                    </TouchableOpacity>
-                    <View style={styles.end_date_box}>
-                        <Text style={styles.font_14pt}>{StartDate2}</Text>
-                    </View>
-                    {Platform.OS === "ios" && (
-                        <View style={style.inlineSwitchContainer}>
-                            <Text style={style.inlineSwitchText}>Display inline?</Text>
-                            <Switch value={inline} onValueChange={setInline} />
+                <View style={styles.footer_fixed}>
+                    <View style={{ flex: 1, flexDirection: "row", padding: 20, alignItems: 'center', marginTop: 5,}}>
+                        <TouchableOpacity style={styles.start_date_box} onPress={showDateTimePicker}>
+                            <Text style={styles.font_16pt}><FontAwesome5 name='calendar-check' size={15} color='white' />  Edit Date</Text>
+                        </TouchableOpacity>
+                        <View style={styles.end_date_box}>
+                            <Text style={styles.font_14pt}>{StartDate2}</Text>
                         </View>
-                    )}
-                    <StDateTimePickerModal
-                        isVisible={pickerMode !== null}
-                        mode={pickerMode}
-                        onConfirm={StartHandleConfirm}
-                        onCancel={hidePicker}
-                        display={inline ? "inline" : undefined}
-                        minimumDate={date}
-                    />
+                        {Platform.OS === "ios" && (
+                            <View style={style.inlineSwitchContainer}>
+                                <Text style={style.inlineSwitchText}>Display inline?</Text>
+                                <Switch value={inline} onValueChange={setInline} />
+                            </View>
+                        )}
+                        <StDateTimePickerModal
+                            isVisible={pickerMode !== null}
+                            mode={pickerMode}
+                            onConfirm={StartHandleConfirm}
+                            onCancel={hidePicker}
+                            display={inline ? "inline" : undefined}
+                            minimumDate={date}
+                        />
+                    </View>
+                    <View style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 15, alignItems: 'center', marginTop: 10, marginBottom: 10,}}>
+                        <View style={styles.footer_fixed}>
+                            <View style={styles.Comment}>
+                                <Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>
+                                <Button title="Review" color="#1E6738" onPress={SaveComment} />
+                            </View>
+                        </View>
+                    </View>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={SaveMyTrip}>
-                    <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} ><FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
-                </TouchableOpacity>
-            </View>
             </ThemeProvider>
-            {/*<View style={styles.footer_fixed}>*/}
-            {/*    <View style={styles.Comment}>*/}
-            {/*        /!*<Input style={styles.textStyle} placeholder="Review in this location ..." onChangeText={setMessage}/>*!/*/}
-            {/*        /!*<Button title="Review" color="#1E6738" onPress={SaveComment} />*!/*/}
-            {/*        */}
-            {/*    </View>*/}
-            {/*</View>*/}
         </SafeAreaView>
     );
 }
@@ -245,14 +268,43 @@ const styles = StyleSheet.create({
         fontFamily: 'KanitLight',
         fontSize: 14,
     },
-    button: {
-        margin: 10,
+    EditBtn: {
+        flex: 1,
         alignItems: "center",
-        backgroundColor: "#0065A2",
-        padding: 10,
+        backgroundColor: "#FCAF38",
+        paddingLeft: 5,
+        padding: 15,
         borderBottomLeftRadius: 3,
-        borderBottomRightRadius: 3,
         borderTopLeftRadius: 3,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    DelBtn: {
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: "#F95335",
+        padding: 15,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    CheckinBtn: {
+        flex: 2,
+        alignItems: "center",
+        backgroundColor: "#186A3B",
+        padding: 15,
+        borderBottomRightRadius: 3,
         borderTopRightRadius: 3,
         shadowColor: "#000",
         shadowOffset: {
@@ -261,7 +313,6 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
-
         elevation: 2,
     },
     start_date_box: {

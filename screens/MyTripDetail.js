@@ -15,7 +15,7 @@ import CommentCard from '../components/CommentCard';
 
 export default function App({ route, navigation }){
 
-    const { PlacePicture, PlaceName, PlaceDesc, PlaceLat, PlaceLong, PlaceID } = route.params;
+    const { PlacePicture, PlaceName, PlaceDesc, PlaceLat, PlaceLong, PlaceID, PlaceDate, id } = route.params;
 
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -29,10 +29,9 @@ export default function App({ route, navigation }){
     const today = new Date();
     const [pickerMode, setPickerMode] = useState(null);
     const [inline, setInline] = useState(false);
-    const tomorrow = new Date(today);
-    const [date] = useState(tomorrow);
-    const [StartDate, setStartDate] = useState('');
-    const [StartDate2, setStartDate2] = useState('');
+    const [date] = useState(today);
+    const [StartDate, setStartDate] = useState(PlaceDate);
+    const [StartDate2, setStartDate2] = useState(PlaceDate);
     const showDateTimePicker = () => {
         setPickerMode("datetime");
     };
@@ -42,7 +41,7 @@ export default function App({ route, navigation }){
     const StartHandleConfirm = (date) => {
         hidePicker();
         setStartDate(date);
-        setStartDate2((moment(date).format('LLLL')));
+        setStartDate2((moment(date).format('llll')));
     };
 
     useEffect(() => {
@@ -63,12 +62,37 @@ export default function App({ route, navigation }){
         CheckLogin();
     }, []);
 
-    async function SaveMyTrip(){
+    async function EditMyTrip(){
         const MyTrip = { place_id: PlaceID, trip_date: StartDate, PlacePicture: PlacePicture, PlaceName : PlaceName, PlaceDesc : PlaceDesc, PlaceLat : PlaceLat, PlaceLong : PlaceLong,};
-        await firebase.firestore().collection('users').doc(currentUser.uid).collection('trip').doc().set(MyTrip)
+        await firebase.firestore().collection('users').doc(currentUser.uid).collection('trip').doc(id).set(MyTrip)
             .then(function (){
                 navigation.navigate('Trip');
             }).catch(function (){});
+    }
+
+    async function DelMyTrip(){
+            let collRef = firestore
+                .collection('users')
+                .doc(currentUser.uid)
+                .collection('trip')
+                .doc(id);
+            await collRef.delete().then(function (){
+                navigation.navigate('Trip');
+            }).catch(function (){});
+    }
+
+    async function Checkin(){
+        const MyTrip = { place_id: PlaceID, Checkin_date: firebase.firestore.FieldValue.serverTimestamp(), PlacePicture: PlacePicture, PlaceName : PlaceName, PlaceDesc : PlaceDesc, PlaceLat : PlaceLat, PlaceLong : PlaceLong,};
+        await firebase.firestore().collection('users').doc(currentUser.uid).collection('checkin').doc().set(MyTrip);
+
+        let collRef = firestore
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection('trip')
+            .doc(id);
+        await collRef.delete().then(function (){
+            navigation.navigate('Checkin');
+        }).catch(function (){});
     }
 
     async function GetComment() {
@@ -131,11 +155,8 @@ export default function App({ route, navigation }){
             <ThemeProvider theme={theme}>
                 <View style={styles.footer_fixed}>
                     <View style={{ flex: 1, flexDirection: "row", padding: 20, alignItems: 'center', marginTop: 5,}}>
-                        {/*<View style={{ flex: 1, alignItems: 'center', }} >*/}
-                        {/*    <Text style={styles.font_16pt}>Date : </Text>*/}
-                        {/*</View>*/}
                         <TouchableOpacity style={styles.start_date_box} onPress={showDateTimePicker}>
-                            <Text style={styles.font_16pt}><FontAwesome5 name='calendar-alt' size={15} color='white' />  Select start</Text>
+                            <Text style={styles.font_16pt}><FontAwesome5 name='calendar-check' size={15} color='white' />  Edit Date</Text>
                         </TouchableOpacity>
                         <View style={styles.end_date_box}>
                             <Text style={styles.font_14pt}>{StartDate2}</Text>
@@ -155,9 +176,17 @@ export default function App({ route, navigation }){
                             minimumDate={date}
                         />
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={SaveMyTrip}>
-                        <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 16,}} ><FontAwesome5 name='luggage-cart' size={15} color='white' />  ADD TO TRIP</Text>
-                    </TouchableOpacity>
+                    <View style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 15, alignItems: 'center', marginTop: 10, marginBottom: 10,}}>
+                        <TouchableOpacity style={styles.EditBtn} onPress={EditMyTrip}>
+                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='edit' size={20} color='white' /> Ed</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.DelBtn} onPress={DelMyTrip}>
+                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='trash' size={20} color='white' /> De</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.CheckinBtn} onPress={Checkin} >
+                            <Text style={{alignItems:"center", color: 'white', fontFamily: 'KanitMedium', fontSize: 15,}} ><FontAwesome5 name='map-marker-alt' size={20} color='white' />  Checkin</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ThemeProvider>
             {/*<View style={styles.footer_fixed}>*/}
@@ -240,14 +269,43 @@ const styles = StyleSheet.create({
         fontFamily: 'KanitLight',
         fontSize: 14,
     },
-    button: {
-        margin: 10,
+    EditBtn: {
+        flex: 1,
         alignItems: "center",
-        backgroundColor: "#0065A2",
-        padding: 10,
+        backgroundColor: "#FCAF38",
+        paddingLeft: 5,
+        padding: 15,
         borderBottomLeftRadius: 3,
-        borderBottomRightRadius: 3,
         borderTopLeftRadius: 3,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    DelBtn: {
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: "#F95335",
+        padding: 15,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    CheckinBtn: {
+        flex: 2,
+        alignItems: "center",
+        backgroundColor: "#186A3B",
+        padding: 15,
+        borderBottomRightRadius: 3,
         borderTopRightRadius: 3,
         shadowColor: "#000",
         shadowOffset: {
@@ -256,11 +314,10 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
-
         elevation: 2,
     },
     start_date_box: {
-        marginLeft: '10%',
+        marginLeft: 5,
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#00B0BA',
@@ -270,7 +327,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 7,
     },
     end_date_box: {
-        marginRight: '10%',
+        marginRight: 5,
         flex: 2,
         alignItems: 'center',
         backgroundColor: '#FF5C77',
@@ -286,7 +343,7 @@ const styles = StyleSheet.create({
     },
     font_16pt: {
         fontFamily: 'KanitMedium',
-        fontSize: 16,
+        fontSize: 14,
         color: 'white',
     },
     inlineSwitchContainer: {
