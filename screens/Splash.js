@@ -1,8 +1,9 @@
 import React from "react";
-import {StyleSheet, Text, View, Image, ActivityIndicator,} from "react-native";
+import {StyleSheet, Text, View, Image, ActivityIndicator, LogBox} from "react-native";
 import Constants from "expo-constants";
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
+LogBox.ignoreAllLogs();
 
 export default function App({navigation}) {
 

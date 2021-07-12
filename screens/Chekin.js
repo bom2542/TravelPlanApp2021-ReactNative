@@ -23,7 +23,7 @@ export default function App({navigation}) {
                         .collection('users')
                         .doc(user.uid)
                         .collection('checkin')
-                        .orderBy('Checkin_date', 'asc');
+                        .orderBy('Checkin_date', 'desc');
 
                     collRef.get().then((querySnap) => {
                         const tempDoc = querySnap.docs.map((doc) => {

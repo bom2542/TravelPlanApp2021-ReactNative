@@ -160,19 +160,19 @@ const styles = StyleSheet.create({
     },
     username: {
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: 20,
         // paddingBottom: 15,
         fontFamily: 'KanitMedium',
     },
     username2: {
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 16,
         paddingBottom: 5,
         fontFamily: 'KanitLight',
     },
     username3: {
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 16,
         paddingBottom: 5,
         fontFamily: 'KanitLight',
         marginBottom: 15,
